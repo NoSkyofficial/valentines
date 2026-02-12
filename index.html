@@ -39,14 +39,14 @@
         body { font-family: 'Outfit', sans-serif; background: var(--bg-dark); color: var(--text-white); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
         .floating-hearts-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
-        .floating-heart { position: absolute; opacity: 0; animation: floatUp linear infinite; filter: blur(0.3px); }
+        .floating-heart { position: absolute; opacity: 0; animation: floatUp linear infinite; filter: blur(0.3px); will-change: transform, opacity; }
         @keyframes floatUp {
             0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
             10% { opacity: 0.6; }
             90% { opacity: 0.15; }
             100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
-        .sparkle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--purple-glow); animation: sparkleFloat linear infinite; opacity: 0; }
+        .sparkle { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--purple-glow); animation: sparkleFloat linear infinite; opacity: 0; will-change: transform, opacity; }
         @keyframes sparkleFloat {
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
             20% { opacity: 0.8; }
@@ -144,7 +144,7 @@
 
         .letter-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.8s ease; }
         .letter-overlay.show { display: flex; opacity: 1; }
-        .letter-overlay-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 10, 26, 0.92); backdrop-filter: blur(12px); }
+        .letter-overlay-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 6, 14, 0.95); }
         .letter-hearts-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
         .letter-container { position: relative; z-index: 2; width: 90%; max-width: 560px; max-height: 80vh; overflow-y: auto; background: #fefcf3; border-radius: 6px; padding: 2.5rem 2.5rem 2.5rem 3.5rem; border: 1px solid #d4c9a8; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(225, 29, 72, 0.08), 4px 4px 0 #e8dfc8; background-image: repeating-linear-gradient(transparent, transparent 31px, #e0d8c8 31px, #e0d8c8 32px); background-position-y: 8px; }
         .letter-container::before { content: ''; position: absolute; top: 0; bottom: 0; left: 2.5rem; width: 2px; background: rgba(225, 100, 100, 0.3); z-index: 1; }
@@ -285,7 +285,7 @@
     function createFloatingHearts() {
         const c = document.getElementById('floatingHearts');
         const h = ['❤️','❤️','💗','🤍','💕','🩷'];
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 15; i++) {
             const s = document.createElement('span');
             s.className = 'floating-heart';
             s.textContent = h[Math.floor(Math.random() * h.length)];
@@ -295,7 +295,7 @@
             s.style.animationDelay = (Math.random()*12)+'s';
             c.appendChild(s);
         }
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 10; i++) {
             const sp = document.createElement('span');
             sp.className = 'sparkle';
             sp.style.left = Math.random()*100+'%';
@@ -337,11 +337,11 @@
         const ex = document.createElement('div'); ex.className='heart-explosion'; document.body.appendChild(ex);
         const hs = ['❤️','💗','🤍','❤️','🩷','💕','❤️'];
         const cx=innerWidth/2, cy=innerHeight/2;
-        for (let i=0;i<60;i++) {
+        for (let i=0;i<30;i++) {
             const h=document.createElement('span'); h.className='explosion-heart';
             h.textContent=hs[Math.floor(Math.random()*hs.length)];
             h.style.left=cx+'px'; h.style.top=cy+'px'; h.style.fontSize=(1+Math.random()*2.5)+'rem';
-            const a=(Math.PI*2*i)/60+(Math.random()-0.5)*0.5, d=150+Math.random()*400;
+            const a=(Math.PI*2*i)/30+(Math.random()-0.5)*0.5, d=150+Math.random()*400;
             h.style.setProperty('--tx',Math.cos(a)*d+'px'); h.style.setProperty('--ty',Math.sin(a)*d+'px');
             h.style.setProperty('--rot',(Math.random()*720-360)+'deg'); h.style.animationDelay=(Math.random()*0.5)+'s';
             ex.appendChild(h);
@@ -418,14 +418,20 @@
     initQuiz();
 
     // ══════════════ LOVE LETTER ══════════════
+    let letterOpened = false;
     document.getElementById('secretBtn').addEventListener('click',()=>{
         const lo=document.getElementById('letterOverlay');lo.style.display='flex';requestAnimationFrame(()=>lo.classList.add('show'));
-        const c=document.getElementById('letterHeartsBg');const hs=['❤️','💗','🤍','🩷'];
-        for(let i=0;i<15;i++){const h=document.createElement('span');h.className='floating-heart';h.textContent=hs[Math.floor(Math.random()*hs.length)];h.style.left=Math.random()*100+'%';h.style.fontSize=(0.6+Math.random())+'rem';h.style.animationDuration=(10+Math.random()*15)+'s';h.style.animationDelay=(Math.random()*5)+'s';c.appendChild(h);}
-        setTimeout(()=>{let i=0;const el=document.getElementById('letterText');el.textContent='';(function t(){if(i<LOVE_LETTER.length){el.textContent+=LOVE_LETTER.charAt(i++);el.parentElement.scrollTop=el.parentElement.scrollHeight;setTimeout(t,45);}else{document.getElementById('letterCursor').style.display='none';document.getElementById('letterFinalHeart').classList.add('show');document.getElementById('letterClose').classList.add('show');}})();},800);
+        document.querySelectorAll('#floatingHearts > *').forEach(el=>el.style.animationPlayState='paused');
+        if(!letterOpened){
+            letterOpened=true;
+            const c=document.getElementById('letterHeartsBg');const hs=['❤️','💗','🤍','🩷'];
+            for(let i=0;i<8;i++){const h=document.createElement('span');h.className='floating-heart';h.textContent=hs[Math.floor(Math.random()*hs.length)];h.style.left=Math.random()*100+'%';h.style.fontSize=(0.6+Math.random())+'rem';h.style.animationDuration=(10+Math.random()*15)+'s';h.style.animationDelay=(Math.random()*5)+'s';c.appendChild(h);}
+            setTimeout(()=>{let i=0;const el=document.getElementById('letterText');el.textContent='';(function t(){if(i<LOVE_LETTER.length){el.textContent+=LOVE_LETTER.charAt(i++);el.parentElement.scrollTop=el.parentElement.scrollHeight;setTimeout(t,45);}else{document.getElementById('letterCursor').style.display='none';document.getElementById('letterFinalHeart').classList.add('show');document.getElementById('letterClose').classList.add('show');}})();},800);
+        }
     });
     document.getElementById('letterClose').addEventListener('click',()=>{
         const lo=document.getElementById('letterOverlay');lo.classList.remove('show');
+        document.querySelectorAll('#floatingHearts > *').forEach(el=>el.style.animationPlayState='running');
         setTimeout(()=>{lo.style.display='none';},800);
     });
 
