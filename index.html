@@ -206,6 +206,7 @@
             <!-- Spotify Player -->
             <div class="music-player-yt">
                 <iframe id="spotifyEmbed"
+                    title="Odtwarzacz Spotify"
                     style="border-radius:12px; border:none; width:100%; height:152px;"
                     src=""
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -214,7 +215,7 @@
             </div>
             <div class="carousel-container">
                 <div class="carousel-viewport" id="carouselViewport">
-                    <div class="carousel-arrows"><button class="carousel-arrow" id="prevSlide">◀</button><button class="carousel-arrow" id="nextSlide">▶</button></div>
+                    <div class="carousel-arrows"><button class="carousel-arrow" id="prevSlide" aria-label="Poprzednie zdjęcie">◀</button><button class="carousel-arrow" id="nextSlide" aria-label="Następne zdjęcie">▶</button></div>
                 </div>
                 <div class="carousel-info" id="carouselInfo"><p class="carousel-caption" id="carouselCaption"></p></div>
                 <div class="carousel-dots" id="carouselDots"></div>
@@ -252,7 +253,7 @@
         <div class="letter-overlay-bg"></div>
         <div class="letter-hearts-bg" id="letterHeartsBg"></div>
         <div class="letter-container">
-            <button class="letter-close" id="letterClose">✕</button>
+            <button class="letter-close" id="letterClose" aria-label="Zamknij list">✕</button>
             <div class="letter-text" id="letterText"></div>
             <span class="letter-cursor" id="letterCursor"></span>
             <div class="letter-final-heart" id="letterFinalHeart">❤️</div>
@@ -380,7 +381,7 @@
         else{const ph=document.createElement('div');ph.className='carousel-placeholder';const icons=['📸','🌅','💫','🎄','🌟'];ph.innerHTML='<span class="carousel-placeholder-icon">'+icons[i%icons.length]+'</span><span class="carousel-placeholder-text">Wstaw zdjęcie '+(i+1)+'</span>';sl.appendChild(ph);}
         if(p.date){const d=document.createElement('div');d.className='carousel-date';d.textContent=p.date;sl.appendChild(d);}
         vp.insertBefore(sl,vp.querySelector('.carousel-arrows'));
-        const dot=document.createElement('button');dot.className='carousel-dot'+(i===0?' active':'');dot.addEventListener('click',()=>goTo(i));dots.appendChild(dot);
+        const dot=document.createElement('button');dot.className='carousel-dot'+(i===0?' active':'');dot.setAttribute('aria-label','Zdjęcie '+(i+1));dot.addEventListener('click',()=>goTo(i));dots.appendChild(dot);
     });
     cap.textContent=PHOTOS[0].caption;
     function goTo(idx){
