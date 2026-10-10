@@ -377,6 +377,7 @@
     let cs=0;
     PHOTOS.forEach((p,i)=>{
         const sl=document.createElement('div');sl.className='carousel-slide'+(i===0?' active':'');
+        // Wpis bez src pokazuje tekst zastępczy zamiast zdjęcia
         if(p.src){const img=document.createElement('img');img.src=p.src;img.alt=p.caption;img.loading='lazy';sl.appendChild(img);}
         else{const ph=document.createElement('div');ph.className='carousel-placeholder';const icons=['📸','🌅','💫','🎄','🌟'];ph.innerHTML='<span class="carousel-placeholder-icon">'+icons[i%icons.length]+'</span><span class="carousel-placeholder-text">Wstaw zdjęcie '+(i+1)+'</span>';sl.appendChild(ph);}
         if(p.date){const d=document.createElement('div');d.className='carousel-date';d.textContent=p.date;sl.appendChild(d);}
